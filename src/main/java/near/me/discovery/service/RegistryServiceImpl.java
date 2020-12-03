@@ -3,7 +3,6 @@ package near.me.discovery.service;
 import near.me.discovery.repository.ClientsRepository;
 import near.me.discovery.repository.entity.ClientEntity;
 import near.me.discovery.repository.entity.ClientInfo;
-import near.me.discovery.service.RegistryService;
 import near.me.discovery.service.dto.RegistrationFormDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,10 +29,11 @@ public class RegistryServiceImpl implements RegistryService {
             final ClientEntity entity = new ClientEntity();
             entity.setClientId(UUID.randomUUID().toString());
             entity.setClientName(clientName);
-            entity.setInfo(new HashSet<>(Arrays.asList(ClientInfo.builder().urlPath(form.getUrlPath()).healthCheck(form.getHealthCheck()).build())));
+            entity.setInfo(new HashSet<>(Arrays.asList(ClientInfo.builder().id(UUID.randomUUID().toString()).urlPath(form.getUrlPath()).healthCheck(form.getHealthCheck()).build())));
             repository.save(entity);
         } else {
-            clientEntity.getInfo().add(ClientInfo.builder().urlPath(form.getUrlPath()).healthCheck(form.getHealthCheck()).build());
+            clientEntity.getInfo().add(ClientInfo.builder().id(UUID.randomUUID().toString()).urlPath(form.getUrlPath()).healthCheck(form.getHealthCheck()).build());
+            repository.save(clientEntity);
         }
     }
 
@@ -42,7 +42,7 @@ public class RegistryServiceImpl implements RegistryService {
     public Optional<ClientInfo> getByClientName(String clientName) {
         final ClientEntity byClientName = repository.findByClientName(clientName);
         if (byClientName != null) {
-            return byClientName.getInfo().stream().findAny();
+            return byClientName.getInfo().stream().filter(ClientInfo::getAvailable).findAny();
         }
         return Optional.empty();
     }

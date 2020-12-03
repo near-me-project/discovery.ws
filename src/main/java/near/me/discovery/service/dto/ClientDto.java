@@ -1,18 +1,17 @@
-package near.me.discovery.repository.entity;
+package near.me.discovery.service.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import near.me.discovery.repository.entity.ClientInfo;
 
 import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class ClientEntity {
+public class ClientDto {
 
-    @Id
     private String id;
 
     private String clientId;

@@ -24,12 +24,11 @@ public class ClientInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClientInfo that = (ClientInfo) o;
-        return Objects.equals(urlPath, that.urlPath) &&
-                Objects.equals(healthCheck, that.healthCheck);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(urlPath, healthCheck);
+        return Objects.hash(id);
     }
 }
