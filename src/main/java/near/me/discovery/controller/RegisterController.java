@@ -33,7 +33,7 @@ public class RegisterController {
     @GetMapping(path = "/pathTo")
     public ResponseEntity<String> getClientHost(@RequestParam(name = "client") String clientName) {
         Optional<ClientInfo> clientHost = registryService.getByClientName(clientName);
-        return clientHost.map(s -> new ResponseEntity<>(s.getUrlPath(), HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>("", HttpStatus.NOT_FOUND));
+        return clientHost.map(s -> new ResponseEntity<>(s.getUrlPath(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>("", HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping(path = "/{clientName}/{clientHost}")

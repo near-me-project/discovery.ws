@@ -43,7 +43,7 @@ public class KillDeadHostNameProcessor {
     private void checkClientAvailability(ClientDto clientDto) {
 
         Stream<CompletableFuture<Void>> all = clientDto.getInfo().stream()
-                .map(clientInfo -> restClient.$.GET(clientInfo.getHealthCheck()).thenAccept(response -> ifFail(response, clientDto, clientInfo)));
+                .map(clientInfo -> restClient.async.GET(clientInfo.getHealthCheck()).thenAccept(response -> ifFail(response, clientDto, clientInfo)));
 
         CompletableFuture.allOf(all.toArray(CompletableFuture[]::new)).whenComplete((r, b) -> updateDataBase(repository, clientDto));
     }
@@ -55,7 +55,7 @@ public class KillDeadHostNameProcessor {
     private void ifFail(SilentResponse response, ClientDto clientDto, ClientInfo clientInfo) {
         if (!response.getStatusCode().orElse(0).equals(200)) {
             clientDto.getInfo().remove(clientInfo);
-            System.out.println("INFO: Host with name: " + clientInfo.getUrlPath() + "has been deleted");
+            System.out.println("INFO: Host with name: " + clientInfo.getUrlPath() + " has been deleted");
 //            clientInfo.setAvailable(false);
         }
     }
